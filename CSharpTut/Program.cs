@@ -5,141 +5,131 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Globalization;
-
 namespace CSharpTut
 {
     class MainClass
     {
         public static void Main(string[] args)
         {
-            int[] favNums = new int[3];
+            int age = 17;
 
-            favNums[0] = 23;
-
-            Console.WriteLine("favNum 0 : {0}", favNums[0]);
-
-            string[] customers = { "Bob", "Sally", "Sue" };
-
-            var employees = new[] { "Mike", "Paul", "Rick" };
-
-            object[] randomArray = { "Paul", 45, 1.234 };
-
-            Console.WriteLine("randomArray 0 : {0}", randomArray[2].GetType());
-
-            Console.WriteLine("Array Size : {0}", randomArray.Length);
-
-            for (int i = 0; i < randomArray.Length; i++)
+            if ((age >= 5) && (age <= 7))
             {
-                Console.WriteLine("Array {0} : Value : {1}", i, randomArray[i]);
+                Console.WriteLine("Go to Elementary School");
+            } else if ((age > 7) && (age < 13))
+            {
+                Console.WriteLine("Go to Middle School");
+            } else if ((age > 13) && (age < 19))
+            {
+                Console.WriteLine("Go to High School");
+            } else
+            {
+                Console.WriteLine("Go to College");
             }
 
-            string[,] custNames = new string[2, 2] { { "Bob", "Smith" }, { "Sally", "Marks" } };
-
-            Console.WriteLine("MD Value : {0}", custNames.GetValue(1, 1));
-
-            for (int i = 0; i < custNames.GetLength(0); i++)
+            if ((age < 14) || (age < 19))
             {
-                for (int j = 0; j < custNames.GetLength(1); j++)
-                {
-                    Console.Write("{0}", custNames[i, j]);
+                Console.WriteLine("You shouldn't work");
+            }
+
+            Console.WriteLine("! true = " + (!true));
+
+            bool canDrive = age >= 16 ? true : false;
+
+            switch (age)
+            {
+                case 1:
+                case 2:
+                    Console.WriteLine("Go to Day Care");
+                    break;
+                case 3:
+                case 4:
+                    Console.WriteLine("Go to Preschool");
+                    break;
+                case 5:
+                    Console.WriteLine("Go to Kindergarten");
+                    break;
+                default:
+                    Console.WriteLine("Go to another school");
+                    goto OtherSchool;
+            }
+
+            OtherSchool:
+                Console.WriteLine("Elementary, Middle, High School");
+
+            string name = "Derek";
+
+            string name2 = "Derek";
+
+            if (name.Equals(name2, StringComparison.Ordinal))
+            {
+                Console.WriteLine("Names are Equal");
+            }
+
+            int i = 1;
+
+            while (i <= 10)
+            {
+                if (i % 2 == 0) {
+                    i++;
+                    continue;
                 }
-                Console.WriteLine();
+
+                if (i == 9) break;
+
+                Console.WriteLine(i);
+
+                i++;
             }
 
-            int[] randNums = { 1, 4, 9, 2 };
+            Random rnd = new Random();
 
-            randNums.SetValue(0, 1);
+            int secretNumber = rnd.Next(1, 11);
 
-            Array.Sort(randNums);
+            int numberGuessed = 0;
 
-            Array.Reverse(randNums);
-
-            Console.WriteLine("1 at Index : {0}", Array.IndexOf(randNums, 1));
-
-            PrintArray(randNums, "For Each");
-
-            int[] srcArray = { 1, 2, 3 };
-
-            int[] destArray = new int[2];
-
-            int startInd = 0;
-
-            int length = 2;
-
-            Array.Copy(srcArray, startInd, destArray, startInd, length);
-
-            PrintArray(destArray, "Copy");
-
-            Array anotherArray = Array.CreateInstance(typeof(int), 10);
-
-            srcArray.CopyTo(anotherArray, 5);
-
-            foreach (int m in anotherArray)
+            do
             {
-                Console.WriteLine("CopyTo : {0}", m);
+                Console.WriteLine("Enter a number between 1 & 10");
+                numberGuessed = Convert.ToInt32(Console.ReadLine());
+            } while (secretNumber != numberGuessed);
+
+            // Other Convert options: ToBoolean, ToByte,
+            // ToChar, ToDecimal, ToDouble, ToInt64,
+            // ToString, and they can convert from any
+            // type to any other type
+
+            double num1 = 5;
+
+            double num2 = 0;
+
+            try
+            {
+                Console.WriteLine("5 / 0 = {0}", DoDivision(num1, num2));
             }
 
-            int[] numArray = { 1, 11, 22 };
-
-            Console.WriteLine("> 10 : {0}", Array.Find(numArray, GT10));
-
-            StringBuilder sb = new StringBuilder("Random Text");
-
-            StringBuilder sb2 = new StringBuilder("More stuff that is important", 256);
-
-            Console.WriteLine("Capacity : {0}", sb.Capacity);
-
-            Console.WriteLine("Capacity : {0}", sb2.Capacity);
-
-            Console.WriteLine("Length : {0}", sb.Length);
-
-            sb2.AppendLine("\nMore important text");
-
-            CultureInfo enUS = CultureInfo.CreateSpecificCulture("en-US");
-
-            string bestCust = "Bob Smith";
-
-            sb2.AppendFormat(enUS, "Best Customer : {0}", bestCust);
-
-            Console.WriteLine(sb2.ToString());
-
-            sb2.Replace("text", "characters");
-
-            Console.WriteLine(sb2.ToString());
-
-            sb2.Clear();
-
-            sb2.Append("Random Text");
-
-            Console.WriteLine(sb.Equals(sb2));
-
-            sb2.Insert(11, " that's great");
-
-            Console.WriteLine(sb2.ToString());
-
-            sb2.Remove(11, 7);
-
-            Console.WriteLine(sb2.ToString());
-
-            long num1 = 1234;
-
-            int num2 = (int)num1;
-
-            Console.WriteLine("Orig : {0} Cast : {1}", num1.GetType(), num2.GetType());
-        }
-
-        static void PrintArray(int[] intArray, string mess)
-        {
-            foreach (int k in intArray)
+            catch (DivideByZeroException ex)
             {
-                Console.WriteLine("{0} : {1}", mess, k);
+                Console.WriteLine("You can't divide by zero");
+
+                Console.WriteLine(ex.GetType().Name);
+
+                Console.WriteLine(ex.Message);
+            }
+
+            finally
+            {
+                Console.WriteLine("Cleaning Up");
             }
         }
 
-        private static bool GT10(int val)
+        static double DoDivision(double x, double y)
         {
-            return val > 10;
+            if (y == 0)
+            {
+                throw new System.DivideByZeroException();
+            }
+            return x / y;
         }
     }
 }
