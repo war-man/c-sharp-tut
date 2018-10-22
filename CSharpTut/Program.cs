@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,125 +10,93 @@ namespace CSharpTut
     {
         public static void Main(string[] args)
         {
-            int age = 17;
+            //double x = 5;
+            //double y = 4;
+            //Console.WriteLine("5 + 4 = {0}", GetSum(x, y));
+            //Console.WriteLine("x {0}", x);
 
-            if ((age >= 5) && (age <= 7))
-            {
-                Console.WriteLine("Go to Elementary School");
-            } else if ((age > 7) && (age < 13))
-            {
-                Console.WriteLine("Go to Middle School");
-            } else if ((age > 13) && (age < 19))
-            {
-                Console.WriteLine("Go to High School");
-            } else
-            {
-                Console.WriteLine("Go to College");
-            }
+            //int solution;
+            //DoubleIt(15, out solution);
+            //Console.WriteLine("15 * 2 = {0}", solution);
 
-            if ((age < 14) || (age < 19))
-            {
-                Console.WriteLine("You shouldn't work");
-            }
+            //int num1 = 10;
+            //int num2 = 20;
+            //Console.WriteLine("Before Swap num1 : {0} num2 : {1}", num1, num2);
+            //Swap(ref num1, ref num2);
+            //Console.WriteLine("After Swap num1 : {0} num2 : {1}", num1, num2);
 
-            Console.WriteLine("! true = " + (!true));
+            //Console.WriteLine("1 + 2 + 3 = {0}", GetSumMore(1, 2, 3));
 
-            bool canDrive = age >= 16 ? true : false;
+            //PrintInfo(zipCode: 15147, name: "Derek Banas");
 
-            switch (age)
-            {
-                case 1:
-                case 2:
-                    Console.WriteLine("Go to Day Care");
-                    break;
-                case 3:
-                case 4:
-                    Console.WriteLine("Go to Preschool");
-                    break;
-                case 5:
-                    Console.WriteLine("Go to Kindergarten");
-                    break;
-                default:
-                    Console.WriteLine("Go to another school");
-                    goto OtherSchool;
-            }
+            //Console.WriteLine("5.0 + 4.5 = {0}", GetSum(5.0, 4.5));
+            //Console.WriteLine("5 + 4 = {0}", GetSum(5, 4));
+            //Console.WriteLine("5 + 4 = {0}", GetSum("5", "4"));
 
-            OtherSchool:
-                Console.WriteLine("Elementary, Middle, High School");
-
-            string name = "Derek";
-
-            string name2 = "Derek";
-
-            if (name.Equals(name2, StringComparison.Ordinal))
-            {
-                Console.WriteLine("Names are Equal");
-            }
-
-            int i = 1;
-
-            while (i <= 10)
-            {
-                if (i % 2 == 0) {
-                    i++;
-                    continue;
-                }
-
-                if (i == 9) break;
-
-                Console.WriteLine(i);
-
-                i++;
-            }
-
-            Random rnd = new Random();
-
-            int secretNumber = rnd.Next(1, 11);
-
-            int numberGuessed = 0;
-
-            do
-            {
-                Console.WriteLine("Enter a number between 1 & 10");
-                numberGuessed = Convert.ToInt32(Console.ReadLine());
-            } while (secretNumber != numberGuessed);
-
-            // Other Convert options: ToBoolean, ToByte,
-            // ToChar, ToDecimal, ToDouble, ToInt64,
-            // ToString, and they can convert from any
-            // type to any other type
-
-            double num1 = 5;
-
-            double num2 = 0;
-
-            try
-            {
-                Console.WriteLine("5 / 0 = {0}", DoDivision(num1, num2));
-            }
-
-            catch (DivideByZeroException ex)
-            {
-                Console.WriteLine("You can't divide by zero");
-
-                Console.WriteLine(ex.GetType().Name);
-
-                Console.WriteLine(ex.Message);
-            }
-
-            finally
-            {
-                Console.WriteLine("Cleaning Up");
-            }
+            CarColor car1 = CarColor.Blue;
+            PaintCar(car1);
         }
 
-        static double DoDivision(double x, double y)
+        //static double GetSum(double x = 1, double y = 1)
+        //{
+        //    double temp = x;
+        //    x = y;
+        //    y = temp;
+
+        //    return x + y;
+        //}
+
+        static double GetSum(double x = 1, double y = 1)
         {
-            if (y == 0)
+            return x + y;
+        }
+
+        static double GetSum(string x = "1", string y = "1")
+        {
+            double dblX = Convert.ToDouble(x);
+            double dblY = Convert.ToDouble(y);
+            return dblX + dblY;
+        }
+
+        static void DoubleIt(int x, out int solution)
+        {
+            solution = x * 2;
+        }
+
+        public static void Swap(ref int num1, ref int num2)
+        {
+            int temp = num1;
+            num1 = num2;
+            num2 = temp;
+        }
+
+        static double GetSumMore(params double[] nums)
+        {
+            double sum = 0;
+            foreach(int i in nums)
             {
-                throw new System.DivideByZeroException();
+                sum += i;
             }
-            return x / y;
+            return sum;
+        }
+
+        static void PrintInfo(string name, int zipCode)
+        {
+            Console.WriteLine("{0} lives in the zip code {1}", name, zipCode);
+        }
+
+        enum CarColor : byte
+        {
+            Orange = 1,
+            Blue,
+            Green,
+            Red,
+            Yellow
+        }
+
+        static void PaintCar(CarColor cc)
+        {
+            Console.WriteLine("The car was painted {0} with the code {1}", cc, (int)cc);
         }
     }
 }
