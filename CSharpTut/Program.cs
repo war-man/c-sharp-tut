@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpTut
 {
@@ -10,93 +6,57 @@ namespace CSharpTut
     {
         public static void Main(string[] args)
         {
-            //double x = 5;
-            //double y = 4;
-            //Console.WriteLine("5 + 4 = {0}", GetSum(x, y));
-            //Console.WriteLine("x {0}", x);
+            //Rectangle rect1;
+            //rect1.length = 200;
+            //rect1.width = 50;
+            //Console.WriteLine("Area of rect1 : {0}", rect1.Area());
 
-            //int solution;
-            //DoubleIt(15, out solution);
-            //Console.WriteLine("15 * 2 = {0}", solution);
+            //Rectangle rect2 = new Rectangle(100, 40);
 
-            //int num1 = 10;
-            //int num2 = 20;
-            //Console.WriteLine("Before Swap num1 : {0} num2 : {1}", num1, num2);
-            //Swap(ref num1, ref num2);
-            //Console.WriteLine("After Swap num1 : {0} num2 : {1}", num1, num2);
+            //rect2 = rect1;
+            //rect1.length = 33;
+            //Console.WriteLine("rect2.length : {0}", rect2.length);
 
-            //Console.WriteLine("1 + 2 + 3 = {0}", GetSumMore(1, 2, 3));
+            //Animal fox = new Animal()
+            //{
+            //    name = "Red",
+            //    sound = "Raaww"
+            //};
 
-            //PrintInfo(zipCode: 15147, name: "Derek Banas");
+            //fox.MakeSound();
 
-            //Console.WriteLine("5.0 + 4.5 = {0}", GetSum(5.0, 4.5));
-            //Console.WriteLine("5 + 4 = {0}", GetSum(5, 4));
-            //Console.WriteLine("5 + 4 = {0}", GetSum("5", "4"));
+            //Console.WriteLine("# of Animals : {0}", Animal.GetNumAnimals());
 
-            CarColor car1 = CarColor.Blue;
-            PaintCar(car1);
-        }
+            //Console.WriteLine("Area of Rectangle : {0}", ShapeMath.GetArea("rectangle", 5, 6));
 
-        //static double GetSum(double x = 1, double y = 1)
-        //{
-        //    double temp = x;
-        //    x = y;
-        //    y = temp;
+            int? randNum = null;
 
-        //    return x + y;
-        //}
-
-        static double GetSum(double x = 1, double y = 1)
-        {
-            return x + y;
-        }
-
-        static double GetSum(string x = "1", string y = "1")
-        {
-            double dblX = Convert.ToDouble(x);
-            double dblY = Convert.ToDouble(y);
-            return dblX + dblY;
-        }
-
-        static void DoubleIt(int x, out int solution)
-        {
-            solution = x * 2;
-        }
-
-        public static void Swap(ref int num1, ref int num2)
-        {
-            int temp = num1;
-            num1 = num2;
-            num2 = temp;
-        }
-
-        static double GetSumMore(params double[] nums)
-        {
-            double sum = 0;
-            foreach(int i in nums)
+            if (randNum == null)
             {
-                sum += i;
+                Console.WriteLine("randNum is null");
             }
-            return sum;
+
+            if (!randNum.HasValue)
+            {
+                Console.WriteLine("randNum is null");
+            }
         }
 
-        static void PrintInfo(string name, int zipCode)
+        struct Rectangle
         {
-            Console.WriteLine("{0} lives in the zip code {1}", name, zipCode);
-        }
+            public double length;
+            public double width;
 
-        enum CarColor : byte
-        {
-            Orange = 1,
-            Blue,
-            Green,
-            Red,
-            Yellow
-        }
+            public Rectangle(double l = 1, double w = 1)
+            {
+                length = l;
+                width = w;
+            }
 
-        static void PaintCar(CarColor cc)
-        {
-            Console.WriteLine("The car was painted {0} with the code {1}", cc, (int)cc);
+            public double Area()
+            {
+                return length * width;
+            }
         }
     }
 }
