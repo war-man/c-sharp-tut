@@ -6,15 +6,25 @@ namespace CSharpTut
     class Animal
     {
         private string name;
-        private string sound;
+        protected string sound;
 
-        public const string SHELTER = "Derek's Home for Animals";
+        protected AnimalIDInfo animalIDInfo = new AnimalIDInfo();
 
-        public readonly int idNum;
-
-        public void MakeSound()
+        public void SetAnimalIdInfo(int idNum, string owner)
         {
-            Console.WriteLine("{0} says {1}", name, sound);
+            animalIDInfo.IDNum = idNum;
+            animalIDInfo.Owner = owner;
+        }
+
+        public void GetAnimalIDInfo()
+        {
+            Console.WriteLine($"{Name} has the ID of {animalIDInfo.IDNum} and is owned by {animalIDInfo.Owner}");
+        }
+
+        //public void MakeSound()
+        public virtual void MakeSound()
+        {
+            Console.WriteLine($"{Name} says {Sound}");
         }
 
         public Animal()
@@ -25,53 +35,48 @@ namespace CSharpTut
 
         public Animal(string name, string sound)
         {
-            SetName(name);
+            Name = name;
             Sound = sound;
-
-            NumOfAnimals = 1;
-
-            Random rnd = new Random();
-            idNum = rnd.Next(1, 2147483640);
         }
 
-        public void SetName(string name)
+        public string Name
         {
-            if (!name.Any(char.IsDigit))
+            get { return name; }
+            set
             {
-                this.name = name;
-            } else
-            {
-                this.name = "No Name";
-                Console.WriteLine("Name can't contain numbers");
+                if (!value.Any(char.IsDigit))
+                {
+                    name = "No Name";
+                }
+                name = value;
             }
-        }
-
-        public string GetName()
-        {
-            return name;
         }
 
         public string Sound
         {
             get { return sound; }
-            set {
+            set
+            {
                 if (value.Length > 10)
                 {
                     sound = "No Sound";
-                    Console.WriteLine("Sound is too long");
                 }
                 sound = value;
             }
         }
 
-        public string Owner { get; set; } = "No Owner";
-
-        public static int numOfAnimals = 0;
-
-        public static int NumOfAnimals
+        public class AnimalHealth
         {
-            get { return numOfAnimals; }
-            set { numOfAnimals += value; }
+            public bool HealthyWeight(double height, double weight)
+            {
+                double calc = height / weight;
+
+                if ((calc >= .18) && (calc <= .27))
+                {
+                    return true;
+                }
+                else return false;
+            }
         }
     }
 }
