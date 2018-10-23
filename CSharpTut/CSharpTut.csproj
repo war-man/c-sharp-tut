@@ -44,6 +44,13 @@
     <Compile Include="Shape.cs" />
     <Compile Include="Circle.cs" />
     <Compile Include="Rectangle.cs" />
+    <Compile Include="IDrivable.cs" />
+    <Compile Include="Vehicle.cs" />
+    <Compile Include="Television.cs" />
+    <Compile Include="ICommand.cs" />
+    <Compile Include="PowerButton.cs" />
+    <Compile Include="TVRemote.cs" />
+    <Compile Include="IElectronicDevice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
