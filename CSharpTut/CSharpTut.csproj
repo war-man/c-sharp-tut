@@ -41,6 +41,9 @@
     <Compile Include="AnimalIDInfo.cs" />
     <Compile Include="Warrior.cs" />
     <Compile Include="Battle.cs" />
+    <Compile Include="Shape.cs" />
+    <Compile Include="Circle.cs" />
+    <Compile Include="Rectangle.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
