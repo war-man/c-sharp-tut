@@ -4,52 +4,29 @@ namespace CSharpTut
 {
     class MainClass
     {
+        /*
+        Bob Attacks Maximus and Deals 74 Damage
+        Maximus Has 69 Health
+
+        Maximus Attacks Bob and Dealth 6 Damage
+        Bob Has 6 Health
+
+        Bob Attacks Maximus and Deals 48 Damage
+        Maximus Has 21 Health
+
+        Maximus Attacks Bob and Deals 48 Damage
+        Bob Has -42 Health
+
+        Bob has Died and Maximus is Victorious
+
+        Game Over
+        */
         public static void Main(string[] args)
         {
-            Animal whiskers = new Animal()
-            {
-                Name = "Whiskers",
-                Sound = "Meow"
-            };
+            Warrior maximus = new Warrior("Maximus", 1000, 120, 40);
+            Warrior bob = new Warrior("Bob", 1000, 120, 40);
 
-            Dog grover = new Dog()
-            {
-                Name = "Grover",
-                Sound = "Woof",
-                Sound2 = "Grrrr"
-            };
-
-            grover.Sound = "Wooooooof";
-
-            whiskers.MakeSound();
-            grover.MakeSound();
-
-            whiskers.SetAnimalIdInfo(12345, "Sally Smith");
-            grover.SetAnimalIdInfo(12346, "Paul Brown");
-
-            whiskers.GetAnimalIDInfo();
-            grover.GetAnimalIDInfo();
-
-            Animal.AnimalHealth getHealth = new Animal.AnimalHealth();
-
-            Console.WriteLine("Is my animal healthy : {0}", getHealth.HealthyWeight(11, 46));
-            Console.WriteLine("Is my animal healthy : {0}", getHealth.HealthyWeight(11, 146));
-
-            Animal monkey = new Animal()
-            {
-                Name = "Happy",
-                Sound = "Eeeeeee"
-            };
-
-            Animal spot = new Dog()
-            {
-                Name = "Spot",
-                Sound = "Wooooooff",
-                Sound2 = "Geeerrrr"
-            };
-
-            monkey.MakeSound();
-            spot.MakeSound();
+            Battle.StartFight(maximus, bob);
         }
     }
 }

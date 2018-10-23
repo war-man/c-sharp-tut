@@ -39,6 +39,8 @@
     <Compile Include="ShapeMath.cs" />
     <Compile Include="Dog.cs" />
     <Compile Include="AnimalIDInfo.cs" />
+    <Compile Include="Warrior.cs" />
+    <Compile Include="Battle.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
