@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace CSharpTut
@@ -9,118 +8,97 @@ namespace CSharpTut
     {
         public static void Main(string[] args)
         {
-            #region ArrayList Code
+            List<Animal> animalList = new List<Animal>();
 
-            ArrayList aList = new ArrayList();
+            animalList.Add(new Animal() { Name = "Doug" });
+            animalList.Add(new Animal() { Name = "Paul" });
+            animalList.Add(new Animal() { Name = "Sally" });
 
-            aList.Add("Bob");
-            aList.Add(40);
+            animalList.Insert(1, new Animal() { Name = "Steve" });
 
-            Console.WriteLine("Count : {0}", aList.Count);
-            Console.WriteLine("Capacity : {0}", aList.Capacity);
+            animalList.RemoveAt(1);
 
-            ArrayList aList2 = new ArrayList();
+            Console.WriteLine("Num of Animals : {0}", animalList.Count());
 
-            aList2.AddRange(new object[] { "Mike", "Sally", "Egg" });
-
-            aList.AddRange(aList2);
-
-            aList2.Sort();
-            aList2.Reverse();
-            aList2.Insert(1, "Turkey");
-
-            ArrayList range = aList2.GetRange(0, 2);
-
-            foreach (object o in range)
+            foreach (Animal a in animalList)
             {
-                Console.WriteLine(o);
-            }
-
-            //aList2.RemoveAt(0);
-            //aList2.RemoveRange(0, 2);
-
-            Console.WriteLine("Turkey Index : {0}", aList2.IndexOf("Turkey", 0));
-
-            string[] myArray = (string[])aList2.ToArray(typeof(string));
-
-            string[] customers = { "Bob", "Sally", "Sue" };
-
-            ArrayList custArrayList = new ArrayList();
-
-            custArrayList.AddRange(customers);
-
-            foreach (string s in custArrayList)
-            {
-                Console.WriteLine(s);
-            }
-
-            #endregion
-
-            Console.WriteLine();
-
-            Dictionary<string, string> superheroes = new Dictionary<string, string>();
-
-            superheroes.Add("Clark Kent", "Superman");
-            superheroes.Add("Bruce Wayne", "Batman");
-            superheroes.Add("Barry West", "Flash");
-
-            superheroes.Remove("Barry West");
-
-            Console.WriteLine("Count : {0}", superheroes.Count);
-            Console.WriteLine("Clark Kent : {0}", superheroes.ContainsKey("Clark Kent"));
-
-            superheroes.TryGetValue("Clark Kent", out string test);
-
-            Console.WriteLine($"Clark Kent : {test}");
-
-            foreach (KeyValuePair<string, string> item in superheroes)
-            {
-                Console.WriteLine("{0} : {1}", item.Key, item.Value);
-            }
-
-            superheroes.Clear();
-
-            Console.WriteLine();
-
-            Queue queue = new Queue();
-
-            queue.Enqueue(1);
-            queue.Enqueue(2);
-            queue.Enqueue(3);
-
-            Console.WriteLine("1 in Queue : {0}", queue.Contains(1));
-            Console.WriteLine("Remove 1 : {0}", queue.Dequeue());
-            Console.WriteLine("Peek 1 : {0}", queue.Peek());
-
-            object[] numArray = queue.ToArray();
-
-            Console.WriteLine(string.Join(", ", numArray));
-
-            foreach (object o in queue)
-            {
-                Console.WriteLine($"Queue : {o}");
+                Console.WriteLine(a.Name);
             }
 
             Console.WriteLine();
 
-            Stack stack = new Stack();
+            // Stack<T>
+            // Queue<T>
+            // Dictionary<TKey, TValue>
 
-            stack.Push(1);
-            stack.Push(2);
-            stack.Push(3);
+            int x = 5, y = 4;
+            Animal.GetSum(ref x, ref y);
 
-            Console.WriteLine("Peek 1 : {0}", stack.Peek());
-            Console.WriteLine("Pop 1 : {0}", stack.Pop());
-            Console.WriteLine("Contain 1 : {0}", stack.Contains(1));
+            string strX = "5", strY = "4";
+            Animal.GetSum(ref strX, ref strY);
 
-            object[] numArray2 = stack.ToArray();
+            Rectangle<int> rec1 = new Rectangle<int>(20, 50);
+            Console.WriteLine(rec1.GetArea());
 
-            Console.WriteLine(string.Join(", ", numArray2));
+            Rectangle<string> rec2 = new Rectangle<string>("20", "50");
+            Console.WriteLine(rec2.GetArea());
 
-            foreach (object o in stack)
+            Arithmetic add, sub, addSub;
+
+            add = new Arithmetic(Add);
+            sub = new Arithmetic(Subtract);
+            addSub = add + sub;
+            sub = addSub - add;
+
+            Console.WriteLine("Add 6 & 10");
+            add(6, 10);
+
+            Console.WriteLine("Add & Subtract 10 & 4");
+            addSub(10, 4);
+        }
+
+        // Homework: Research struct
+        public struct Rectangle<T>
+        {
+            private T width;
+            private T length;
+
+            public T Width
             {
-                Console.WriteLine($"Stack : {o}");
+                get { return width; }
+                set { width = value; }
             }
+
+            public T Length
+            {
+                get { return length; }
+                set { length = value; }
+            }
+
+            public Rectangle(T w, T l)
+            {
+                width = w;
+                length = l;
+            }
+
+            public string GetArea()
+            {
+                double dblWidth = Convert.ToDouble(Width);
+                double dblLength = Convert.ToDouble(Length);
+                return string.Format($"{Width} * {Length} = {dblWidth * dblLength}");
+            }
+        }
+
+        public delegate void Arithmetic(double num1, double num2);
+
+        public static void Add(double num1, double num2)
+        {
+            Console.WriteLine($"{num1} + {num2} = {num1 + num2}");
+        }
+
+        public static void Subtract(double num1, double num2)
+        {
+            Console.WriteLine($"{num1} - {num2} = {num1 - num2}");
         }
     }
 }
