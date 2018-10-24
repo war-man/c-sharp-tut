@@ -6,99 +6,103 @@ namespace CSharpTut
 {
     class MainClass
     {
+        delegate double doubleIt(double val);
+
         public static void Main(string[] args)
         {
-            List<Animal> animalList = new List<Animal>();
+            Console.WriteLine("Double it:");
 
-            animalList.Add(new Animal() { Name = "Doug" });
-            animalList.Add(new Animal() { Name = "Paul" });
-            animalList.Add(new Animal() { Name = "Sally" });
+            doubleIt dblIt = x => x * 2;
 
-            animalList.Insert(1, new Animal() { Name = "Steve" });
+            Console.WriteLine($"5 * 2 = {dblIt(5)}");
 
-            animalList.RemoveAt(1);
+            List<int> numList = new List<int> { 1, 9, 2, 6, 3 };
 
-            Console.WriteLine("Num of Animals : {0}", animalList.Count());
+            Console.WriteLine("\nEven List:");
 
-            foreach (Animal a in animalList)
+            var evenList = numList.Where(a => a % 2 == 0).ToList();
+
+            foreach (var j in evenList)
             {
-                Console.WriteLine(a.Name);
+                Console.WriteLine(j);
             }
 
-            Console.WriteLine();
+            Console.WriteLine("\nRange List:");
 
-            // Stack<T>
-            // Queue<T>
-            // Dictionary<TKey, TValue>
+            var rangeList = numList.Where(x => (x > 2) && (x < 9)).ToList();
 
-            int x = 5, y = 4;
-            Animal.GetSum(ref x, ref y);
-
-            string strX = "5", strY = "4";
-            Animal.GetSum(ref strX, ref strY);
-
-            Rectangle<int> rec1 = new Rectangle<int>(20, 50);
-            Console.WriteLine(rec1.GetArea());
-
-            Rectangle<string> rec2 = new Rectangle<string>("20", "50");
-            Console.WriteLine(rec2.GetArea());
-
-            Arithmetic add, sub, addSub;
-
-            add = new Arithmetic(Add);
-            sub = new Arithmetic(Subtract);
-            addSub = add + sub;
-            sub = addSub - add;
-
-            Console.WriteLine("Add 6 & 10");
-            add(6, 10);
-
-            Console.WriteLine("Add & Subtract 10 & 4");
-            addSub(10, 4);
-        }
-
-        // Homework: Research struct
-        public struct Rectangle<T>
-        {
-            private T width;
-            private T length;
-
-            public T Width
+            foreach (var j in rangeList)
             {
-                get { return width; }
-                set { width = value; }
+                Console.WriteLine(j);
             }
 
-            public T Length
+            Console.WriteLine("\nFlip list:");
+
+            List<int> flipList = new List<int>();
+
+            int i = 0;
+
+            Random rnd = new Random();
+
+            while (i < 100)
             {
-                get { return length; }
-                set { length = value; }
+                flipList.Add(rnd.Next(1, 3));
+                i++;
             }
 
-            public Rectangle(T w, T l)
+            Console.WriteLine("Heads : {0}", flipList.Where(h => h == 1).ToList().Count());
+            Console.WriteLine("Tails : {0}", flipList.Where(t => t == 2).ToList().Count());
+
+            Console.WriteLine("\nList by name starting with specific letter:");
+
+            var nameList = new List<string> { "Doug", "Sally", "Sue" };
+            var sNameList = nameList.Where(x => x.StartsWith("S"));
+
+            foreach (var m in sNameList)
             {
-                width = w;
-                length = l;
+                Console.WriteLine(m);
             }
 
-            public string GetArea()
+            Console.WriteLine("\nSelect:");
+
+            var oneTo10 = new List<int>();
+            oneTo10.AddRange(Enumerable.Range(1, 10));
+
+            var squares = oneTo10.Select(x => x * x);
+
+            foreach (var l in squares)
             {
-                double dblWidth = Convert.ToDouble(Width);
-                double dblLength = Convert.ToDouble(Length);
-                return string.Format($"{Width} * {Length} = {dblWidth * dblLength}");
+                Console.WriteLine(l);
             }
-        }
 
-        public delegate void Arithmetic(double num1, double num2);
+            Console.WriteLine("\nZip:");
 
-        public static void Add(double num1, double num2)
-        {
-            Console.WriteLine($"{num1} + {num2} = {num1 + num2}");
-        }
+            var listOne = new List<int>(new int[] { 1, 3, 4 });
+            var listTwo = new List<int>(new int[] { 4, 6, 8 });
+            var sumList = listOne.Zip(listTwo, (x, y) => x + y).ToList();
 
-        public static void Subtract(double num1, double num2)
-        {
-            Console.WriteLine($"{num1} - {num2} = {num1 - num2}");
+            foreach (var n in sumList)
+            {
+                Console.WriteLine(n);
+            }
+
+            var numList2 = new List<int>() { 1, 2, 3, 4, 5 };
+            Console.WriteLine("\nAggregate : {0}", numList2.Aggregate((a, b) => a + b));
+
+            var numList3 = new List<int>() { 1, 2, 3, 4, 5 };
+            Console.WriteLine("Avg : {0}", numList3.AsQueryable().Average());
+
+            Console.WriteLine("All > 3 : {0}", numList3.All(x => x > 3));
+
+            Console.WriteLine("Any > 3 : {0}", numList3.Any(x => x > 3));
+
+            var numList4 = new List<int>() { 1, 2, 3, 2, 3 };
+            var numList5 = new List<int>() { 3 };
+            var numList6 = new List<int>() { 2, 3 };
+
+            Console.WriteLine("Distinct : {0}", string.Join(", ", numList4.Distinct()));
+            Console.WriteLine("Except : {0}", string.Join(", ", numList4.Except(numList5)));
+            Console.WriteLine("Intersect : {0}", string.Join(", ", numList4.Intersect(numList6)));
         }
     }
 }
