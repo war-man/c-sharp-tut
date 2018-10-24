@@ -6,103 +6,61 @@ namespace CSharpTut
 {
     class MainClass
     {
-        delegate double doubleIt(double val);
-
         public static void Main(string[] args)
         {
-            Console.WriteLine("Double it:");
+            Console.WriteLine("Animal Farm:");
 
-            doubleIt dblIt = x => x * 2;
+            AnimalFarm myAnimals = new AnimalFarm();
 
-            Console.WriteLine($"5 * 2 = {dblIt(5)}");
+            myAnimals[0] = new Animal("Wilbur");
+            myAnimals[1] = new Animal("Templeton");
+            myAnimals[2] = new Animal("Gander");
+            myAnimals[3] = new Animal("Charlotte");
 
-            List<int> numList = new List<int> { 1, 9, 2, 6, 3 };
-
-            Console.WriteLine("\nEven List:");
-
-            var evenList = numList.Where(a => a % 2 == 0).ToList();
-
-            foreach (var j in evenList)
+            foreach (Animal i in myAnimals)
             {
-                Console.WriteLine(j);
+                Console.WriteLine(i.Name);
             }
 
-            Console.WriteLine("\nRange List:");
+            Console.WriteLine("\nBox:");
 
-            var rangeList = numList.Where(x => (x > 2) && (x < 9)).ToList();
+            Box box1 = new Box(2, 3, 4);
+            Box box2 = new Box(5, 6, 7);
+            Box box3 = box1 + box2;
 
-            foreach (var j in rangeList)
+            Console.WriteLine($"Box 3 : {box3}");
+            Console.WriteLine($"Box Int : {(int)box3}");
+
+            Box box4 = (Box)4;
+
+            Console.WriteLine($"Box 4 : {(Box)4}");
+
+            Console.WriteLine("\nShop:");
+
+            var shopkins = new {
+                Name = "Shopkins",
+                Price = 4.99
+            };
+
+            Console.WriteLine("{0} costs ${1}", shopkins.Name, shopkins.Price);
+
+            var toyArray = new[] {
+                new
+                {
+                    Name = "Yo-Kai Pack",
+                    Price = 4.99
+                },
+                new
+                {
+                    Name = "Legos",
+                    Price = 9.99
+                }
+            };
+
+            foreach (var item in toyArray)
             {
-                Console.WriteLine(j);
+                Console.WriteLine("{0} costs ${1}", item.Name, item.Price);
             }
-
-            Console.WriteLine("\nFlip list:");
-
-            List<int> flipList = new List<int>();
-
-            int i = 0;
-
-            Random rnd = new Random();
-
-            while (i < 100)
-            {
-                flipList.Add(rnd.Next(1, 3));
-                i++;
-            }
-
-            Console.WriteLine("Heads : {0}", flipList.Where(h => h == 1).ToList().Count());
-            Console.WriteLine("Tails : {0}", flipList.Where(t => t == 2).ToList().Count());
-
-            Console.WriteLine("\nList by name starting with specific letter:");
-
-            var nameList = new List<string> { "Doug", "Sally", "Sue" };
-            var sNameList = nameList.Where(x => x.StartsWith("S"));
-
-            foreach (var m in sNameList)
-            {
-                Console.WriteLine(m);
-            }
-
-            Console.WriteLine("\nSelect:");
-
-            var oneTo10 = new List<int>();
-            oneTo10.AddRange(Enumerable.Range(1, 10));
-
-            var squares = oneTo10.Select(x => x * x);
-
-            foreach (var l in squares)
-            {
-                Console.WriteLine(l);
-            }
-
-            Console.WriteLine("\nZip:");
-
-            var listOne = new List<int>(new int[] { 1, 3, 4 });
-            var listTwo = new List<int>(new int[] { 4, 6, 8 });
-            var sumList = listOne.Zip(listTwo, (x, y) => x + y).ToList();
-
-            foreach (var n in sumList)
-            {
-                Console.WriteLine(n);
-            }
-
-            var numList2 = new List<int>() { 1, 2, 3, 4, 5 };
-            Console.WriteLine("\nAggregate : {0}", numList2.Aggregate((a, b) => a + b));
-
-            var numList3 = new List<int>() { 1, 2, 3, 4, 5 };
-            Console.WriteLine("Avg : {0}", numList3.AsQueryable().Average());
-
-            Console.WriteLine("All > 3 : {0}", numList3.All(x => x > 3));
-
-            Console.WriteLine("Any > 3 : {0}", numList3.Any(x => x > 3));
-
-            var numList4 = new List<int>() { 1, 2, 3, 2, 3 };
-            var numList5 = new List<int>() { 3 };
-            var numList6 = new List<int>() { 2, 3 };
-
-            Console.WriteLine("Distinct : {0}", string.Join(", ", numList4.Distinct()));
-            Console.WriteLine("Except : {0}", string.Join(", ", numList4.Except(numList5)));
-            Console.WriteLine("Intersect : {0}", string.Join(", ", numList4.Intersect(numList6)));
         }
     }
 }

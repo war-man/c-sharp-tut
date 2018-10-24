@@ -51,6 +51,8 @@
     <Compile Include="PowerButton.cs" />
     <Compile Include="TVRemote.cs" />
     <Compile Include="IElectronicDevice.cs" />
+    <Compile Include="AnimalFarm.cs" />
+    <Compile Include="Box.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
