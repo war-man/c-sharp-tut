@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace CSharpTut
 {
@@ -9,268 +10,131 @@ namespace CSharpTut
     {
         public static void Main(string[] args)
         {
-            QueryStringArray();
-            QueryIntArray();
-            QueryArrayList();
-            QueryCollection();
-            QueryAnimalData();
+            //Thread t = new Thread(Print1);
+
+            //t.Start();
+
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    Console.Write(0);
+            //}
+
+
+            //int num = 1;
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Console.WriteLine(num);
+            //    Thread.Sleep(1000);
+            //    num++;
+            //}
+
+            //Console.WriteLine("Thread Ends");
+
+
+            //BankAcct acct = new BankAcct(10);
+            //Thread[] threads = new Thread[15];
+
+            //Thread.CurrentThread.Name = "main";
+
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    Thread t = new Thread(new ThreadStart(acct.IssueWithdraw));
+            //    t.Name = i.ToString();
+            //    threads[i] = t;
+            //}
+
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    Console.WriteLine(
+            //        "Thread {0} Alive : {1}",
+            //        threads[i].Name,
+            //        threads[i].IsAlive
+            //    );
+
+            //    threads[i].Start();
+
+            //    Console.WriteLine(
+            //        "Thread {0} Alive : {1}",
+            //        threads[i].Name,
+            //        threads[i].IsAlive
+            //    );
+            //}
+
+            //Console.WriteLine(
+            //    "Current Priority : {0}",
+            //    Thread.CurrentThread.Priority
+            //);
+
+            //Console.WriteLine(
+            //    "Thread {0} Ending",
+            //    Thread.CurrentThread.Name
+            //);
+
+
+            Thread t = new Thread(() => CountTo(10));
+            t.Start();
+
+            new Thread(() =>
+            {
+                CountTo(5);
+                CountTo(6);
+            }).Start();
         }
 
-        static void QueryStringArray()
+        static void Print1()
         {
-            string[] dogs =
+            for (int i = 0; i < 1000; i++)
             {
-                "K 9",
-                "Brian Griffin",
-                "Scooby Doo",
-                "Old Yeller",
-                "Rin Tin Tin",
-                "Benji",
-                "Charlie B. Barkin",
-                "Lassie",
-                "Snoopie"
-            };
+                Console.Write(1);
+            }
+        }
 
-            var dogSpaces = from dog in dogs
-                            where dog.Contains(" ")
-                            orderby dog descending
-                            select dog;
-
-            foreach (var i in dogSpaces)
+        static void CountTo(int maxNum)
+        {
+            for (int i = 0; i <= maxNum; i++)
             {
                 Console.WriteLine(i);
             }
-
-            Console.WriteLine();
         }
+    }
+}
 
-        static int[] QueryIntArray()
+class BankAcct
+{
+    private Object acctLock = new Object();
+    double Balance { get; set; }
+
+    public BankAcct(double bal)
+    {
+        Balance = bal;
+    }
+
+    public double Withdraw(double amt)
+    {
+        if ((Balance - amt) < 0)
         {
-            int[] nums = { 5, 10, 15, 20, 25, 30, 35 };
-
-            var gt20 = from num in nums
-                       where num > 20
-                       orderby num
-                       select num;
-
-            foreach (var i in gt20)
-            {
-                Console.WriteLine(i);
-            }
-
-            Console.WriteLine();
-
-            Console.WriteLine($"Get Type : {gt20.GetType()}");
-
-            var listGT20 = gt20.ToList<int>();
-            var arrayGT20 = gt20.ToArray();
-
-            nums[0] = 40;
-
-            foreach (var i in gt20)
-            {
-                Console.WriteLine(i);
-            }
-
-            Console.WriteLine();
-
-            return arrayGT20;
+            Console.WriteLine($"Sorry ${Balance} in Account");
+            return Balance;
         }
 
-        static void QueryArrayList()
+        lock (acctLock)
         {
-            ArrayList famAnimals = new ArrayList()
+            if (Balance >= amt)
             {
-                new Animal
-                {
-                    Name = "Heidi",
-                    Height = .8,
-                    Weight = 18
-                },
-                new Animal
-                {
-                    Name = "Shrek",
-                    Height = 4,
-                    Weight = 130
-                },
-                new Animal
-                {
-                    Name = "Congo",
-                    Height = 3.8,
-                    Weight = 90
-                }
-            };
-
-            var famAnimalEnum = famAnimals.OfType<Animal>();
-
-            var smAnimals = from animal in famAnimalEnum
-                            where animal.Weight <= 90
-                            orderby animal.Name
-                            select animal;
-
-            foreach (var animal in smAnimals)
-            {
-                Console.WriteLine("{0} weighs {1} lbs", animal.Name, animal.Weight);
+                Console.WriteLine(
+                    "Removed {0} and {1} left in Account",
+                    amt,
+                    (Balance - amt)
+                );
+                Balance -= amt;
             }
-
-            Console.WriteLine();
+            return Balance;
         }
+    }
 
-        static void QueryCollection()
-        {
-            var animalList = new List<Animal>()
-            {
-                new Animal
-                {
-                    Name = "German Shepherd",
-                    Height = 25,
-                    Weight = 77
-                },
-                new Animal
-                {
-                    Name = "Chihuahua",
-                    Height = 7,
-                    Weight = 4.4
-                },
-                new Animal
-                {
-                    Name = "Saint Bernard",
-                    Height = 30,
-                    Weight = 200
-                }
-            };
-
-            var bigDogs = from dog in animalList
-                          where (dog.Weight > 70) && (dog.Height > 25)
-                          orderby dog.Name
-                          select dog;
-
-            foreach (var dog in bigDogs)
-            {
-                Console.WriteLine("A {0} weights {1} lbs", dog.Name, dog.Weight);
-            }
-
-            Console.WriteLine();
-        }
-
-        static void QueryAnimalData()
-        {
-            Animal[] animals = new[]
-            {
-                new Animal
-                {
-                    Name = "German Shepherd",
-                    Height = 25,
-                    Weight = 77,
-                    AnimalID = 1
-                },
-                new Animal
-                {
-                    Name = "Chihuahua",
-                    Height = 7,
-                    Weight = 4.4,
-                    AnimalID = 2
-                },
-                new Animal
-                {
-                    Name = "Saint Bernard",
-                    Height = 30,
-                    Weight = 200,
-                    AnimalID = 3
-                },
-                new Animal
-                {
-                    Name = "Pug",
-                    Height = 12,
-                    Weight = 16,
-                    AnimalID = 1
-                },
-                new Animal
-                {
-                    Name = "Beagle",
-                    Height = 15,
-                    Weight = 23,
-                    AnimalID = 2
-                }
-            };
-
-            Owner[] owners = new[]
-            {
-                new Owner
-                {
-                    Name = "Doug Parks",
-                    OwnerID = 1
-                },
-                new Owner
-                {
-                    Name = "Sally Smith",
-                    OwnerID = 2
-                },
-                new Owner
-                {
-                    Name = "Paul Brooks",
-                    OwnerID = 3
-                }
-            };
-
-            var nameHeight = from a in animals
-                             select new
-                             {
-                                 a.Name,
-                                 a.Height
-                             };
-
-            Array arrNameHeight = nameHeight.ToArray();
-
-            foreach (var i in arrNameHeight)
-            {
-                Console.WriteLine(i.ToString());
-            }
-
-            Console.WriteLine();
-
-            var innerJoin =
-                from animal in animals
-                join owner in owners on animal.AnimalID
-                equals owner.OwnerID
-                select new
-                {
-                    OwnerName = owner.Name,
-                    AnimalName = animal.Name
-                };
-
-            foreach (var i in innerJoin)
-            {
-                Console.WriteLine("{0} owns {1}", i.OwnerName, i.AnimalName);
-            }
-
-            Console.WriteLine();
-
-            var groupJoin =
-                from owner in owners
-                orderby owner.OwnerID
-                join animal in animals
-                on owner.OwnerID
-                equals animal.AnimalID
-                into ownerGroup
-                select new
-                {
-                    Owner = owner.Name,
-                    Animals =
-                        from owner2 in ownerGroup
-                        orderby owner2.Name
-                        select owner2
-                };
-
-            foreach (var ownerGroup in groupJoin)
-            {
-                Console.WriteLine(ownerGroup.Owner);
-
-                foreach (var animal in ownerGroup.Animals)
-                {
-                    Console.WriteLine("* {0}", animal.Name);
-                }
-            }
-        }
+    public void IssueWithdraw()
+    {
+        Withdraw(1);
     }
 }
