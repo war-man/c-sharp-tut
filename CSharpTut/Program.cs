@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
+
+using System.IO;
+using System.Text;
 
 namespace CSharpTut
 {
@@ -10,131 +12,117 @@ namespace CSharpTut
     {
         public static void Main(string[] args)
         {
-            //Thread t = new Thread(Print1);
+            string folderName = @"\Users\joshuawaheed";
+            string pathString = Path.Combine(folderName, "c-sharp-data");
 
-            //t.Start();
+            DirectoryInfo currDir = new DirectoryInfo(".");
+            DirectoryInfo joshuasDir =
+                new DirectoryInfo(folderName);
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    Console.Write(0);
-            //}
+            Console.WriteLine(joshuasDir.FullName);
+            Console.WriteLine(joshuasDir.Name);
+            Console.WriteLine(joshuasDir.Parent);
+            Console.WriteLine(joshuasDir.Attributes);
+            Console.WriteLine(joshuasDir.CreationTime);
 
+            Directory.CreateDirectory(pathString);
+            // Directory.Delete(pathString);
 
-            //int num = 1;
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Console.WriteLine(num);
-            //    Thread.Sleep(1000);
-            //    num++;
-            //}
-
-            //Console.WriteLine("Thread Ends");
-
-
-            //BankAcct acct = new BankAcct(10);
-            //Thread[] threads = new Thread[15];
-
-            //Thread.CurrentThread.Name = "main";
-
-            //for (int i = 0; i < 15; i++)
-            //{
-            //    Thread t = new Thread(new ThreadStart(acct.IssueWithdraw));
-            //    t.Name = i.ToString();
-            //    threads[i] = t;
-            //}
-
-            //for (int i = 0; i < 15; i++)
-            //{
-            //    Console.WriteLine(
-            //        "Thread {0} Alive : {1}",
-            //        threads[i].Name,
-            //        threads[i].IsAlive
-            //    );
-
-            //    threads[i].Start();
-
-            //    Console.WriteLine(
-            //        "Thread {0} Alive : {1}",
-            //        threads[i].Name,
-            //        threads[i].IsAlive
-            //    );
-            //}
-
-            //Console.WriteLine(
-            //    "Current Priority : {0}",
-            //    Thread.CurrentThread.Priority
-            //);
-
-            //Console.WriteLine(
-            //    "Thread {0} Ending",
-            //    Thread.CurrentThread.Name
-            //);
-
-
-            Thread t = new Thread(() => CountTo(10));
-            t.Start();
-
-            new Thread(() =>
+            string[] customers =
             {
-                CountTo(5);
-                CountTo(6);
-            }).Start();
-        }
+                "Bob Smith",
+                "Sally Smith",
+                "Robert Smith"
+            };
 
-        static void Print1()
-        {
-            for (int i = 0; i < 1000; i++)
+            string textFilePath = Path.Combine(pathString, "testfile1.txt");
+
+            File.WriteAllLines(textFilePath, customers);
+
+            foreach (string cust in File.ReadAllLines(textFilePath))
             {
-                Console.Write(1);
+                Console.WriteLine($"Customer : {cust}");
             }
-        }
 
-        static void CountTo(int maxNum)
-        {
-            for (int i = 0; i <= maxNum; i++)
+            DirectoryInfo myDataDir = new DirectoryInfo(pathString);
+
+            FileInfo[] txtFiles =
+                myDataDir.GetFiles("*.txt", SearchOption.AllDirectories);
+
+            Console.WriteLine("Matches : {0}", txtFiles.Length);
+
+            foreach (FileInfo file in txtFiles)
             {
-                Console.WriteLine(i);
+                Console.WriteLine(file.Name);
+                Console.WriteLine(file.Length);
             }
-        }
-    }
-}
 
-class BankAcct
-{
-    private Object acctLock = new Object();
-    double Balance { get; set; }
+            string textFilePath2 = Path.Combine(pathString, "testfile2.txt");
 
-    public BankAcct(double bal)
-    {
-        Balance = bal;
-    }
+            FileStream fs = File.Open(textFilePath2, FileMode.Create);
 
-    public double Withdraw(double amt)
-    {
-        if ((Balance - amt) < 0)
-        {
-            Console.WriteLine($"Sorry ${Balance} in Account");
-            return Balance;
-        }
+            string randString = "This is a random string";
 
-        lock (acctLock)
-        {
-            if (Balance >= amt)
+            byte[] rsByteArray = Encoding.Default.GetBytes(randString);
+
+            fs.Write(rsByteArray, 0, rsByteArray.Length);
+
+            fs.Position = 0;
+
+            byte[] fileByteArray = new byte[rsByteArray.Length];
+
+            for (int i = 0; i < rsByteArray.Length; i++)
             {
-                Console.WriteLine(
-                    "Removed {0} and {1} left in Account",
-                    amt,
-                    (Balance - amt)
-                );
-                Balance -= amt;
+                fileByteArray[i] = (byte)fs.ReadByte();
             }
-            return Balance;
-        }
-    }
 
-    public void IssueWithdraw()
-    {
-        Withdraw(1);
+            Console.WriteLine(Encoding.Default.GetString(fileByteArray));
+
+            fs.Close();
+
+            string textFilePath3 = Path.Combine(pathString, "testfile3.txt");
+
+            StreamWriter sw = File.CreateText(textFilePath3);
+
+            sw.Write("This is a random ");
+            sw.WriteLine("sentence");
+            sw.WriteLine("This is another sentence");
+
+            sw.Close();
+
+            StreamReader sr = File.OpenText(textFilePath3);
+
+            Console.WriteLine("Peek : {0}", Convert.ToChar(sr.Peek()));
+
+            Console.WriteLine("1st String : {0}", sr.ReadLine());
+
+            Console.WriteLine("Everything : {0}", sr.ReadToEnd());
+
+            sr.Close();
+
+            string textFilePath4 = Path.Combine(pathString, "testfile4.dat");
+
+            FileInfo datFile = new FileInfo(textFilePath4);
+
+            BinaryWriter bw = new BinaryWriter(datFile.OpenWrite());
+
+            string randText = "Random Text";
+            int myAge = 42;
+            double height = 6.25;
+
+            bw.Write(randText);
+            bw.Write(myAge);
+            bw.Write(height);
+
+            bw.Close();
+
+            BinaryReader br = new BinaryReader(datFile.OpenRead());
+
+            Console.WriteLine(br.ReadString());
+            Console.WriteLine(br.ReadInt32());
+            Console.WriteLine(br.ReadDouble());
+
+            br.Close();
+        }
     }
 }
