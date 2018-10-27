@@ -1,128 +1,101 @@
-﻿using System;
+﻿// ---------- Program.cs ----------
+
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+// Used for writing to a file
 using System.IO;
-using System.Text;
 
-namespace CSharpTut
+// Used to serialize an object to binary format
+using System.Runtime.Serialization.Formatters.Binary;
+
+// Used to serialize into XML
+using System.Xml.Serialization;
+
+namespace CSharpTutA.cs
 {
-    class MainClass
+    class Program
     {
-        public static void Main(string[] args)
+
+        static void Main(string[] args)
         {
-            string folderName = @"\Users\joshuawaheed";
-            string pathString = Path.Combine(folderName, "c-sharp-data");
+            Animal bowser = new Animal("Bowser", 45, 25);
 
-            DirectoryInfo currDir = new DirectoryInfo(".");
-            DirectoryInfo joshuasDir =
-                new DirectoryInfo(folderName);
+            // Serialize the object data to a file
+            Stream stream = File.Open("AnimalData.dat", FileMode.Create);
+            BinaryFormatter bf = new BinaryFormatter();
 
-            Console.WriteLine(joshuasDir.FullName);
-            Console.WriteLine(joshuasDir.Name);
-            Console.WriteLine(joshuasDir.Parent);
-            Console.WriteLine(joshuasDir.Attributes);
-            Console.WriteLine(joshuasDir.CreationTime);
+            // Send the object data to the file
+            bf.Serialize(stream, bowser);
+            stream.Close();
 
-            Directory.CreateDirectory(pathString);
-            // Directory.Delete(pathString);
+            // Delete the bowser data
+            bowser = null;
 
-            string[] customers =
+            // Read object data from the file
+            stream = File.Open("AnimalData.dat", FileMode.Open);
+            bf = new BinaryFormatter();
+
+            bowser = (Animal)bf.Deserialize(stream);
+            stream.Close();
+
+            Console.WriteLine(bowser.ToString());
+
+            // Change bowser to show changes were made
+            bowser.Weight = 50;
+
+            // XmlSerializer writes object data as XML
+            XmlSerializer serializer = new XmlSerializer(typeof(Animal));
+            using (TextWriter tw = new StreamWriter(@"C:\Users\joshuawaheed\C#Data\bowser.xml"))
             {
-                "Bob Smith",
-                "Sally Smith",
-                "Robert Smith"
+                serializer.Serialize(tw, bowser);
+            }
+
+            // Delete bowser data
+            bowser = null;
+
+            // Deserialize from XML to the object
+            XmlSerializer deserializer = new XmlSerializer(typeof(Animal));
+            TextReader reader = new StreamReader(@"C:\Users\joshuawaheed\C#Data\bowser.xml");
+            object obj = deserializer.Deserialize(reader);
+            bowser = (Animal)obj;
+            reader.Close();
+
+            Console.WriteLine(bowser.ToString());
+
+            // Save a collection of Animals
+            List<Animal> theAnimals = new List<Animal>
+            {
+                new Animal("Mario", 60, 30),
+                new Animal("Luigi", 55, 24),
+                new Animal("Peach", 40, 20)
             };
 
-            string textFilePath = Path.Combine(pathString, "testfile1.txt");
-
-            File.WriteAllLines(textFilePath, customers);
-
-            foreach (string cust in File.ReadAllLines(textFilePath))
+            using (Stream fs = new FileStream(@"C:\Users\joshuawaheed\C#Data\animals.xml",
+                FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                Console.WriteLine($"Customer : {cust}");
+                XmlSerializer serializer2 = new XmlSerializer(typeof(List<Animal>));
+                serializer2.Serialize(fs, theAnimals);
             }
 
-            DirectoryInfo myDataDir = new DirectoryInfo(pathString);
+            // Delete list data
+            theAnimals = null;
 
-            FileInfo[] txtFiles =
-                myDataDir.GetFiles("*.txt", SearchOption.AllDirectories);
+            // Read data from XML
+            XmlSerializer serializer3 = new XmlSerializer(typeof(List<Animal>));
 
-            Console.WriteLine("Matches : {0}", txtFiles.Length);
-
-            foreach (FileInfo file in txtFiles)
+            using (FileStream fs2 = File.OpenRead(@"C:\Users\joshuawaheed\C#Data\animals.xml"))
             {
-                Console.WriteLine(file.Name);
-                Console.WriteLine(file.Length);
+                theAnimals = (List<Animal>)serializer3.Deserialize(fs2);
             }
 
-            string textFilePath2 = Path.Combine(pathString, "testfile2.txt");
 
-            FileStream fs = File.Open(textFilePath2, FileMode.Create);
-
-            string randString = "This is a random string";
-
-            byte[] rsByteArray = Encoding.Default.GetBytes(randString);
-
-            fs.Write(rsByteArray, 0, rsByteArray.Length);
-
-            fs.Position = 0;
-
-            byte[] fileByteArray = new byte[rsByteArray.Length];
-
-            for (int i = 0; i < rsByteArray.Length; i++)
+            foreach (Animal a in theAnimals)
             {
-                fileByteArray[i] = (byte)fs.ReadByte();
+                Console.WriteLine(a.ToString());
             }
-
-            Console.WriteLine(Encoding.Default.GetString(fileByteArray));
-
-            fs.Close();
-
-            string textFilePath3 = Path.Combine(pathString, "testfile3.txt");
-
-            StreamWriter sw = File.CreateText(textFilePath3);
-
-            sw.Write("This is a random ");
-            sw.WriteLine("sentence");
-            sw.WriteLine("This is another sentence");
-
-            sw.Close();
-
-            StreamReader sr = File.OpenText(textFilePath3);
-
-            Console.WriteLine("Peek : {0}", Convert.ToChar(sr.Peek()));
-
-            Console.WriteLine("1st String : {0}", sr.ReadLine());
-
-            Console.WriteLine("Everything : {0}", sr.ReadToEnd());
-
-            sr.Close();
-
-            string textFilePath4 = Path.Combine(pathString, "testfile4.dat");
-
-            FileInfo datFile = new FileInfo(textFilePath4);
-
-            BinaryWriter bw = new BinaryWriter(datFile.OpenWrite());
-
-            string randText = "Random Text";
-            int myAge = 42;
-            double height = 6.25;
-
-            bw.Write(randText);
-            bw.Write(myAge);
-            bw.Write(height);
-
-            bw.Close();
-
-            BinaryReader br = new BinaryReader(datFile.OpenRead());
-
-            Console.WriteLine(br.ReadString());
-            Console.WriteLine(br.ReadInt32());
-            Console.WriteLine(br.ReadDouble());
-
-            br.Close();
         }
     }
 }
